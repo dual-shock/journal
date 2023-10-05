@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nora's Diary App</title>
+    <link type="image/png" sizes="120x120" rel="icon" href="./imgs/nokkenlogo.png">
+    <!-- TODO Why logo not showing up -->
+    <meta http-equiv="ScreenOrientation" content="autoRotate:disabled">
+    <link rel="stylesheet" href="main.css">
+
+</head>
+<body>
+
+    <div id="login-container" style="display:none;">
+
+        <div id="signin-container" class="login-element-container" style="display:none;">
+            <div class="login-element">
+                <input type="email" id="signin-email-input" minlength="2" maxlength="999" placeholder="Email" required >
+            </div>
+            <div class="login-element">
+                <input type="password" id="signin-password-input" minlength="2" maxlength="999" autocomplete="current-password" placeholder="Password" required >
+            </div>
+            <div class="login-element">
+                <button id="signin-button">> Log in!</button>
+            </div>
+            <div class="login-element">
+                <button id="signup-redirect-button">New user? ></button>
+            </div>
+            <div id="signin-error" class="login-element signin-error" style="display: none;">
+                <!-- ? text comes from js --> 
+            </div>
+        </div>
+
+        <div id="signup-container" class="login-element-container" style="display: none;">
+            <div class="login-element">
+                <input type="email" id="signup-email-input" minlength="2" maxlength="999" placeholder="Email" required >
+            </div>
+            <div class="login-element">
+                <input type="password" id="signup-password-input" placeholder="Password" minlength="2" maxlength="999" autocomplete="new-password" placeholder="Password" required >
+            </div>
+            <div class="login-element">
+                <input type="password" id="signup-confirm-password-input" placeholder="Confirm password" minlength="2" maxlength="999" autocomplete="new-password" placeholder="Password" required >
+            </div> 
+            <div class="login-element">
+                <button id="signup-button">> Register!</button>
+            </div>
+            <div class="login-element">
+                <button id="signin-redirect-button">Already a user? ></button>
+            </div>
+            <div id="signup-error" class="login-element signin-error" style="display: none;">
+                <!-- ? text comes from js -->
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div id="content-container" style="display:none;">
+
+        <div id="category-selector">
+            <div id="dream-selector-button" class="category-selector-button"> Dreams </div>
+            <div id="diary-selector-button" class="category-selector-button"> Diary </div>
+            <div id="thought-selector-button" class="category-selector-button"> Thoughts </div>
+        </div>
+
+        <div id="entries-content-container" style="display: flex;">
+
+            <div id="entries-and-sidebar-buttons"> 
+                <div id="sidebar-toggle-button" class="entry-button"> X </div>
+                <div id="add-entry-button" class="entry-button"> Add entry</div>
+            </div>
+
+            <div id="entries-and-sidebar-container">
+                <div id="sidebar"> <!-- ? Gets filled by JS --> aasddftftfadasdr </div>  
+                <div id="entries"> <!-- ? Gets filled by JS --> entries 
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div id="logout-button" class="entry-button"> Log out </div>
+
+        </div>
+
+        <div id="new-entry-container" style="display: none;">
+            <div id="add-entry-pick-buttons">
+                <div id="pick-draft-button" class="entry-button"> Drafts </div>
+                <div id="time-input-container" class="entry-button">    <input type="datetime-local" id="time-input">    </div>
+            </div>
+
+            <div id="text-input-container">    <textarea id="text-input" placeholder="type here..."></textarea>    </div>
+
+            <div id="add-entry-action-buttons">
+                <div id="cancel-entry-button" class="entry-button"> Cancel </div>
+                <div id="draft-entry-button" class="entry-button"> + Draft </div>
+                <div id="submit-entry-button" class="entry-button"> Submit </div>                
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+<script src="js/utils.js"></script>
+<script src="./main.js" type="module"></script>
+</html>
