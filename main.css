@@ -139,9 +139,19 @@
             #sidebar{
                 flex:1;
                 word-break: break-all;
+                display:flex;
+                flex-direction: column;
+                align-items: stretch;
+                justify-content:flex-start;
+                row-gap: 20px;  
             }
             #entries{
-                flex:6;   
+                flex:6;
+                display:flex;
+                flex-direction: column;
+                align-items: stretch;
+                justify-content:flex-start;
+                row-gap: 20px;  
             }
         #logout-button{
             flex:1;
