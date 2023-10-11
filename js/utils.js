@@ -1,3 +1,33 @@
+function binaryFind(array, searchElement) {
+    'use strict';
+    let minIndex = 0;
+    let maxIndex = array.length - 1;
+    let currentIndex;
+    let currentElement;
+  
+    while (minIndex <= maxIndex) {
+        currentIndex = (minIndex + maxIndex) / 2 | 0; //more performant than math.floor
+        currentElement = array[currentIndex];
+  
+        if (currentElement < searchElement) {
+            minIndex = currentIndex + 1;
+        }
+        else if (currentElement > searchElement) {
+            maxIndex = currentIndex - 1;
+        }
+        else {
+            return { // Modification
+                found: true,
+                index: currentIndex
+            };
+        }
+    }      
+    return { 
+        found: false,
+        index: currentElement < searchElement ? currentIndex + 1 : currentIndex
+    };
+};
+
 function formatDateForEntry(date){
     let formattedDate = date.toLocaleString("en-GB", {
         month:"short",

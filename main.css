@@ -159,6 +159,9 @@
                 .month{
                     min-height:60px;
                 }
+                .sidebar-selected{
+                    color:red;
+                }
             #entries-container{
                 display:flex;
                 width:100%;

@@ -60,8 +60,6 @@ const categories = {
     },
 }
 
-const timeFrames = []
-
 const timeframe = {
     use:false,
     start:0,
@@ -104,7 +102,8 @@ const inputElms =  [...grab('.login-element > input', "all")]
 const entriesElm = grab("entries")
 const sidebarElm = grab("sidebar")
 
-
+var sortedListOfIds = []
+var sortedListOfEntries = []
 
 
 function switchToSignup(){
@@ -269,28 +268,67 @@ function resetAddEntryInputs(){
 //     // )
 // }
 
+//!
+
 
 function appendEntryToList(entryObj){
     let entryElm = document.createElement("div")
     entryElm.id = entryObj.id
     let entryDate = new Date(entryObj.id * 1000)
     entryElm.classList.add("entry")
-    entryElm.dataset.category
+    entryElm.dataset.category = entryObj.data().category
     
     let year = `_${entryDate.getFullYear()}`
     let monthYear = `${months[entryDate.getMonth()]}_${entryDate.getFullYear()}`
     
 
-    if(document.querySelector(`#_${year}`) === null){
-        let yearSidebarElm =  document.createElement("div")
-        yearSidebarElm.id = `_${year}`
+    if(document.querySelector(`#${year}`) === null){
+        let yearSidebarElm = document.createElement("div")
+        yearSidebarElm.dataset.selected = "false"
+
+        yearSidebarElm.addEventListener("click", e => {
+            if(!e.target.classList.contains("sidebar-selected")){
+                if(grab("sidebar-selected","class").length){
+                    grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
+                }
+                timeframe.use = true
+                timeframe.start = Math.round(new Date(`1 January ${year.split("_")[1]} 00:00:00`).getTime() / 1000)
+                timeframe.end = Math.round(new Date(`31 December ${year.split("_")[1]} 23:59:59`).getTime() / 1000)
+                filterEntries(category)
+                e.target.classList.add("sidebar-selected")    
+            }
+            else{
+                timeframe.use = false
+                filterEntries(category)
+                e.target.classList.remove("sidebar-selected")   
+            }
+        })
+
+        yearSidebarElm.id = `${year}`
         yearSidebarElm.innerHTML = `${year}`
         grab("sidebar").appendChild(yearSidebarElm)
     }
 
     if(document.querySelector(`#${monthYear}`) === null){
-        let monthSidebarElm =  document.createElement("div")
-        console.log(monthYear)
+        let monthSidebarElm = document.createElement("div")
+
+        monthSidebarElm.addEventListener("click", e => {
+            if(!e.target.classList.contains("sidebar-selected")){
+                if(grab("sidebar-selected","class").length){
+                    grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
+                }
+                timeframe.use = true
+                timeframe.start = Math.round(new Date(`1 ${monthYear.replace("_"," ")} 00:00:00`).getTime() / 1000)
+                timeframe.end = Math.round(new Date(`${new Date(entryDate.getFullYear(), entryDate.getMonth() + 1, 0).getDate()} ${monthYear.replace("_"," ")} 23:59:59`).getTime() / 1000)
+                filterEntries(category)
+                e.target.classList.add("sidebar-selected")    
+            }
+            else{
+                timeframe.use = false
+                filterEntries(category)
+                e.target.classList.remove("sidebar-selected")   
+            }
+        })
         
         monthSidebarElm.id = `${monthYear}`
         monthSidebarElm.innerHTML = `${monthYear}`
@@ -302,19 +340,129 @@ function appendEntryToList(entryObj){
     entryElm.innerHTML = `
         ${formatDateForEntry(entryDate)} ${entryObj.id}
     `
-    
+
     grab("entries").appendChild(entryElm)
-}
-function insertEntryToList(entryObj){
+    sortedListOfEntries.push(entryElm)
+    sortedListOfIds.push(entryObj.id)
 
 }
-function filterEntries(categoryObj){
-    //console.log(grab("entries").children)
-    if(grab("entries").children.length){
-        console.log("filter entries",categoryObj.current, timeframe)
-    }
+function insertEntryToList(entryObj){
+    let insertInfo = binaryFind(sortedListOfIds, entryObj.id)
+    if(insertInfo.found){throw new Error("item already exists at this second")}
     else{
-        //console.log("no content to filter")4
+        
+        
+        let entryElm = document.createElement("div")
+        entryElm.id = entryObj.id
+        let entryDate = new Date(entryObj.id * 1000)
+        entryElm.classList.add("entry")
+        entryElm.dataset.category = entryObj.data().category
+        
+        let year = `_${entryDate.getFullYear()}`
+        let monthYear = `${months[entryDate.getMonth()]}_${entryDate.getFullYear()}`
+    
+        if(document.querySelector(`#${year}`) === null){
+            let yearSidebarElm = document.createElement("div")
+            yearSidebarElm.dataset.selected = "false"
+    
+            yearSidebarElm.addEventListener("click", e => {
+                if(!e.target.classList.contains("sidebar-selected")){
+                    if(grab("sidebar-selected","class").length){
+                        grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
+                    }
+                    timeframe.use = true
+                    timeframe.start = Math.round(new Date(`1 January ${year.split("_")[1]} 00:00:00`).getTime() / 1000)
+                    timeframe.end = Math.round(new Date(`31 December ${year.split("_")[1]} 23:59:59`).getTime() / 1000)
+                    filterEntries(category)
+                    e.target.classList.add("sidebar-selected")    
+                }
+                else{
+                    timeframe.use = false
+                    filterEntries(category)
+                    e.target.classList.remove("sidebar-selected")   
+                }
+            })
+    
+            yearSidebarElm.id = `${year}`
+            yearSidebarElm.innerHTML = `${year}`
+            grab("sidebar").appendChild(yearSidebarElm)
+        }
+    
+        if(document.querySelector(`#${monthYear}`) === null){
+            let monthSidebarElm = document.createElement("div")
+    
+            monthSidebarElm.addEventListener("click", e => {
+                if(!e.target.classList.contains("sidebar-selected")){
+                    if(grab("sidebar-selected","class").length){
+                        grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
+                    }
+                    timeframe.use = true
+                    timeframe.start = Math.round(new Date(`1 ${monthYear.replace("_"," ")} 00:00:00`).getTime() / 1000)
+                    timeframe.end = Math.round(new Date(`${new Date(entryDate.getFullYear(), entryDate.getMonth() + 1, 0).getDate()} ${monthYear.replace("_"," ")} 23:59:59`).getTime() / 1000)
+                    filterEntries(category)
+                    e.target.classList.add("sidebar-selected")    
+                }
+                else{
+                    timeframe.use = false
+                    filterEntries(category)
+                    e.target.classList.remove("sidebar-selected")   
+                }
+            })
+                
+            monthSidebarElm.id = `${monthYear}`
+            monthSidebarElm.innerHTML = `${monthYear}`
+            grab("sidebar").appendChild(monthSidebarElm)
+        }
+    
+        entryElm.innerHTML = `
+            ${formatDateForEntry(entryDate)} ${entryObj.id}
+        `
+        
+    
+        sortedListOfIds.splice(insertInfo.index, 0, entryObj.id)
+        sortedListOfEntries.splice(insertInfo.index, 0, entryElm)
+    
+        grab("entries").innerHTML = "";
+        for(let entry of sortedListOfEntries){
+            grab("entries").append(entry)
+        }
+    }
+}
+
+
+function filterEntries(categoryObj){
+    let entries = grab("entries").children
+    if(entries.length){
+        console.log("filter entries",categoryObj.current, timeframe)
+        let entryVisible = false
+        if(timeframe.use){
+            for(let entry of entries){
+                if(entry.dataset.category !== categoryObj.current.name || timeframe.start > Number(entry.id) > timeframe.end){
+                    entry.style.display = "none"
+                }
+                else{
+                    entryVisible = true
+                    entry.style.display = "block"
+                }   
+            }
+        }
+        else{
+            for(let entry of entries){
+                if(entry.dataset.category !== categoryObj.current.name){
+                    entry.style.display = "none"
+                }
+                else{
+                    entryVisible = true
+                    entry.style.display = "block"
+                }
+            }
+        }
+        if(!entryVisible){
+            //TODO Add a "no entries here" thing for when entryVisible is not true
+        }
+        else{
+
+        }
     }
 }
 function reverseChildren(){
@@ -357,6 +505,19 @@ function addEventListenersToElements(){
     grab("signin-redirect-button").addEventListener("click", switchToSignin)
 
 // ? Content buttons
+    grab("content-container").addEventListener("click", e =>{
+        if(
+            grab("sidebar-selected","class").length 
+            && !e.target.classList.contains("sidebar-selected")
+            && !e.target.classList.contains("category-selector-button")
+        )
+        {
+            grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
+            timeframe.use = false
+            filterEntries(category)
+        }
+    })
+
     grab("dream-selector-button").addEventListener("click", () => category.current = categories.dream)
     grab("diary-selector-button").addEventListener("click", () => category.current = categories.diary)
     grab("thought-selector-button").addEventListener("click", () => category.current = categories.thought)
@@ -483,14 +644,14 @@ onAuthStateChanged(auth, async (user) => {
                 snapshot.docChanges().forEach((change) => {
                     const source = snapshot.metadata.fromCache ? "local cache" : "server";
                     if(change.type === "added"){
-                        console.log(change.doc.id, lastId)
                         if(change.doc.id > lastId){
-                            appendEntryToList(change.doc)
+                            appendEntryToList(change.doc)      
+                            console.log("added:",change.doc.data(), "from", source)            
                         }
                         else{
-                            //insertEntyToList(change.doc)
+                            insertEntyToList(change.doc)
+                            console.log("inserted:",change.doc.data(), "from", source)
                         }
-                        console.log("added:",change.doc.data(), "from", source)
                     }
                     if(change.type === "modified"){
                         console.log("modified:",change.doc.data(), "from", source)
@@ -518,4 +679,3 @@ onAuthStateChanged(auth, async (user) => {
 
 
 addEventListenersToElements()
-
