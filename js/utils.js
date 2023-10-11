@@ -1,10 +1,11 @@
-function formatDateForEntry(timestamp){
-    let formattedDate = new Date(timestamp*1000).toLocaleString("en-GB", {
+function formatDateForEntry(date){
+    let formattedDate = date.toLocaleString("en-GB", {
         month:"short",
         day: "numeric",
         year: "numeric",
         hour:"numeric",
-        minute:"numeric"
+        minute:"numeric",
+        second:"numeric"
     })
     return formattedDate
 }

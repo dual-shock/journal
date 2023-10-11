@@ -60,6 +60,8 @@ const categories = {
     },
 }
 
+const timeFrames = []
+
 const timeframe = {
     use:false,
     start:0,
@@ -192,7 +194,7 @@ function resetLoginInputs(){
 
 function resetAddEntryInputs(){
     //TODO 
-}
+}   
 
 
 // async function addEntry(
@@ -266,38 +268,79 @@ function resetAddEntryInputs(){
 //     //     }
 //     // )
 // }
-async function loadEntries(userId){
+
+
+function appendEntryToList(entryObj){
+    let entryElm = document.createElement("div")
+    entryElm.id = entryObj.id
+    let entryDate = new Date(entryObj.id * 1000)
+    entryElm.classList.add("entry")
+    entryElm.dataset.category
+    
+    let year = `_${entryDate.getFullYear()}`
+    let monthYear = `${months[entryDate.getMonth()]}_${entryDate.getFullYear()}`
+    
+
+    if(document.querySelector(`#_${year}`) === null){
+        let yearSidebarElm =  document.createElement("div")
+        yearSidebarElm.id = `_${year}`
+        yearSidebarElm.innerHTML = `${year}`
+        grab("sidebar").appendChild(yearSidebarElm)
+    }
+
+    if(document.querySelector(`#${monthYear}`) === null){
+        let monthSidebarElm =  document.createElement("div")
+        console.log(monthYear)
+        
+        monthSidebarElm.id = `${monthYear}`
+        monthSidebarElm.innerHTML = `${monthYear}`
+        grab("sidebar").appendChild(monthSidebarElm)
+    }
+
+    
+
+    entryElm.innerHTML = `
+        ${formatDateForEntry(entryDate)} ${entryObj.id}
+    `
+    
+    grab("entries").appendChild(entryElm)
+}
+function insertEntryToList(entryObj){
 
 }
-
 function filterEntries(categoryObj){
     //console.log(grab("entries").children)
     if(grab("entries").children.length){
         console.log("filter entries",categoryObj.current, timeframe)
     }
     else{
-        //console.log("no content to filter")
+        //console.log("no content to filter")4
     }
 }
 function reverseChildren(){
     if(entriesElm.dataset.flipped == "false"){
         entriesElm.style.flexDirection = "column-reverse";
-        entriesElm.style.justifyContent = "flex-end"
         sidebarElm.style.flexDirection = "column-reverse";
-        sidebarElm.style.justifyContent = "flex-end"
+
+        entriesElm.scrollTop = 0 - entriesElm.scrollHeight
+        sidebarElm.scrollTop = 0 - sidebarElm.scrollHeight
+
         entriesElm.dataset.flipped = "true"
         grab("sidebar-toggle-button").innerHTML = "&#8593;"
         return
     }
     if(entriesElm.dataset.flipped == "true"){
-        entriesElm.style.flexDirection = "column";
-        entriesElm.style.justifyContent = "flex-start"
+        entriesElm.style.flexDirection = "column"
         sidebarElm.style.flexDirection = "column";
-        sidebarElm.style.justifyContent = "flex-start"
+
+        entriesElm.scrollTop = 0
+        sidebarElm.scrollTop = 0    
+    
         entriesElm.dataset.flipped = "false"
         grab("sidebar-toggle-button").innerHTML = "&#8595;"
         return
     }
+    
 }
 function unloadEntries(){
     //console.log("Unload data")
@@ -434,11 +477,19 @@ onAuthStateChanged(auth, async (user) => {
         switchToShowEntries()
 
         //await loadEntries(user.uid)
+        var lastId = "0"
         onSnapshot(
             query(collection(db, `users/${user.uid}/entries`)), { includeMetadataChanges: true }, (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
                     const source = snapshot.metadata.fromCache ? "local cache" : "server";
                     if(change.type === "added"){
+                        console.log(change.doc.id, lastId)
+                        if(change.doc.id > lastId){
+                            appendEntryToList(change.doc)
+                        }
+                        else{
+                            //insertEntyToList(change.doc)
+                        }
                         console.log("added:",change.doc.data(), "from", source)
                     }
                     if(change.type === "modified"){
@@ -447,6 +498,7 @@ onAuthStateChanged(auth, async (user) => {
                     if(change.type === "removed"){
                         console.log("removed:",change.doc.data(), "from", source)
                     }
+                    lastId = change.doc.id
                 })
             }
         )
