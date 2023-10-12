@@ -22,11 +22,8 @@ import {
 from "./js/firebaseUtils.js"
 
 // * formatDateForEntry(), addZero(), emailValid()
-// * hide(), showFlex(), showBlock()
+// * hide(), showFlex(), showBlock(), binaryFind()
 // * Added to namespace from js/utils.js in index.html
-
-//TODO MAKE VAR FOR GLOBAL VARS
-
 
 const firebaseConfig = {
     apiKey: "AIzaSyBXiMzyl3Q5IwCMFSoLYVQBdRiWTVq7ChI",
@@ -44,7 +41,10 @@ const db = initializeFirestore(app, {
 })
 const auth = getAuth();
 
-
+const months = [ 
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December" 
+]
 const categories = {
     dream : {
         name : "dream",
@@ -59,13 +59,11 @@ const categories = {
         bgColor: "#bbcd92"
     },
 }
-
 const timeframe = {
     use:false,
     start:0,
     end:0,
 }
-
 class Category {
     constructor(current){
         this.current = current   
@@ -79,9 +77,7 @@ class Category {
                 throw new Error("Method param. is not a category")
             }
             this._current = categoryObject
-            
             filterEntries(this)
-            
         }
         catch(e){
             console.log("Failed to switch current category")
@@ -89,13 +85,7 @@ class Category {
         }
     }    
 }
-
 const category = new Category(categories.diary)
-
-const months = [ 
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December" 
-]
 
 const inputElms =  [...grab('.login-element > input', "all")]
 
@@ -104,7 +94,6 @@ const sidebarElm = grab("sidebar")
 
 var sortedListOfIds = []
 var sortedListOfEntries = []
-
 
 function switchToSignup(){
 
@@ -122,7 +111,6 @@ function switchToSignup(){
     hide("entries-content-container")
     hide("new-entry-container")
 }
-
 function switchToSignin(){
 
 // * LogIn
@@ -139,7 +127,6 @@ function switchToSignin(){
     hide("entries-content-container")
     hide("new-entry-container")
 }
-
 function switchToShowEntries(){
 
 // * LogIn
@@ -157,7 +144,6 @@ function switchToShowEntries(){
     hide("new-entry-container")
     
 }
-
 function switchToAddEntry(){
 
 // * LogIn
@@ -176,10 +162,7 @@ function switchToAddEntry(){
     showFlex("new-entry-container")
 }
 
-
-
 function resetLoginInputs(){
-
     grab("signin-email-input").value = ""
     grab("signin-password-input").value = ""
     grab("signup-email-input").value = ""
@@ -190,97 +173,63 @@ function resetLoginInputs(){
         inputElm.addEventListener("click", e => { e.target.classList.add("login-input-clicked") }, {once: true})
     })    
 }
-
 function resetAddEntryInputs(){
-    //TODO 
+    grab("time-input").value = `${new Date().getFullYear()}-${addZero(new Date().getMonth()+1)}-${addZero(new Date().getDate())}T${addZero(new Date().getHours())}:${addZero(new Date().getMinutes())}:${new Date().getSeconds()}`
+    grab("text-input").value = ""
+    grab("text-input").placeholder = "type here..."
 }   
 
+function addNewEntry(){
+    let timeInput = grab("time-input").value
+    let textInput = grab("text-input").value 
 
-// async function addEntry(
-//     
-//     categoryObj,
-//     unixSecs=Math.round(Date.now() / 1000),
-//     content="Lorem Ipsum"
-// ){
-//     console.log(categoryObj.current.name, unixSecs, content)
-//     if(1){
-//         try{
-//             let docRef = setDoc(doc(db, `users/${userId}/entries`, unixSecs), {
-//                 
-//                 category:categoryObj.current.name,
-//                 content:content
-//             })
-//         }
-//         catch(e){
-//             console.error("Error adding document: ", e);
-//         }
-//     }
-// }
-// await new Promise(r => setTimeout(r, 2000));
-// addEntry(category)
-// await new Promise(r => setTimeout(r, 2000));
-// addEntry(category)
-// await new Promise(r => setTimeout(r, 2000));
-// addEntry(category)
-// await new Promise(r => setTimeout(r, 2000));
-// addEntry(category)
-// await new Promise(r => setTimeout(r, 2000));
-// addEntry(category)
-
-// async function loadEntries(userId){
-//     //console.log("Load data")
-//     //TODO Add pagination, for now just load all then cache
-
-//     let queryCached = query(collection(db, `users/${userId}/entries`))
-    
-//     let cachedDocs = await getDocsFromCache(queryCached)
-
-//     if(cachedDocs.empty){
-//         let queryAll = query(collection(db, `users/${userId}/entries`))
-//         //getDocs(queryAll)
-//     }
-//     else{
-//         //TODO Check for missing indexes between last index and first index of cached docs
-
-//         // 
-//     }
-
-//     console.log(cachedDocs.empty)
+    let entryId = Math.round(new Date(timeInput).getTime() / 1000)
 
 
+    if(textInput == ""){
+        grab("text-input").placeholder = "entry cannot be empty! type something..."
+    }
+    else{
+        console.log(userId)
+        try{
+            let docRef = setDoc( doc(db, `users/${userId}/entries`, `${entryId}`), {
+                category:category.current.name,
+                content:textInput
+            })
+            switchToShowEntries()
+        }
+        catch(e){
+            console.log(e)
+        }
+    }
+}
+function openDrafts(){
+    //TODO Add func.
+    console.log("drafts functionality not yet added")
+}
+function addNewDraft(){
+    //TODO Add func.
+    console.log("drafts functionality not yet added")
+}
 
-
-//     // onSnapshot(
-//     //     query(collection(db, `users/${userId}/entries`)), { includeMetadataChanges: true }, (snapshot) => {
-//     //         snapshot.docChanges().forEach((change) => {
-//     //             const source = snapshot.metadata.fromCache ? "local cache" : "server";
-//     //             if(change.type === "added"){
-//     //                 console.log("added:",change.doc.data(), "from", source)
-//     //             }
-//     //             if(change.type === "modified"){
-//     //                 console.log("modified:",change.doc.data(), "from", source)
-//     //             }
-//     //             if(change.type === "removed"){
-//     //                 console.log("removed:",change.doc.data(), "from", source)
-//     //             }
-//     //         })
-//     //     }
-//     // )
-// }
-
-//!
-
-
-function appendEntryToList(entryObj){
+function entryObjToEntryElement(entryObj){
     let entryElm = document.createElement("div")
     entryElm.id = entryObj.id
     let entryDate = new Date(entryObj.id * 1000)
     entryElm.classList.add("entry")
     entryElm.dataset.category = entryObj.data().category
-    
+    entryElm.innerHTML = `
+        ${formatDateForEntry(entryDate)} <br>
+        ${entryObj.id} <br>
+        ${entryObj.data().category} <br>
+        ${entryObj.data().content} <br>
+    ` 
+    if(entryObj.data().category != category.current.name){
+        entryElm.style.display = "none"
+    }
+
     let year = `_${entryDate.getFullYear()}`
     let monthYear = `${months[entryDate.getMonth()]}_${entryDate.getFullYear()}`
-    
 
     if(document.querySelector(`#${year}`) === null){
         let yearSidebarElm = document.createElement("div")
@@ -306,9 +255,11 @@ function appendEntryToList(entryObj){
 
         yearSidebarElm.id = `${year}`
         yearSidebarElm.innerHTML = `${year}`
-        grab("sidebar").appendChild(yearSidebarElm)
+        grab("sidebar").prepend(yearSidebarElm)
     }
-
+    //TODO The sidebar moves back in time downwards, so the year item is naturally at the bottom of all the months
+    //TODO Of said year, find solution that puts year ABOVE all those months instead (and perhaps inverts that)
+    //TODO When reverting the list (this might happen naturally if added in right order)
     if(document.querySelector(`#${monthYear}`) === null){
         let monthSidebarElm = document.createElement("div")
 
@@ -332,93 +283,27 @@ function appendEntryToList(entryObj){
         
         monthSidebarElm.id = `${monthYear}`
         monthSidebarElm.innerHTML = `${monthYear}`
-        grab("sidebar").appendChild(monthSidebarElm)
+        grab("sidebar").prepend(monthSidebarElm)
     }
 
-    
+    return entryElm
+}
+function prependEntryToList(entryObj){
 
-    entryElm.innerHTML = `
-        ${formatDateForEntry(entryDate)} ${entryObj.id}
-    `
+    let entryElm = entryObjToEntryElement(entryObj)
 
-    grab("entries").appendChild(entryElm)
     sortedListOfEntries.push(entryElm)
     sortedListOfIds.push(entryObj.id)
+
+    grab("entries").prepend(entryElm)
 
 }
 function insertEntryToList(entryObj){
     let insertInfo = binaryFind(sortedListOfIds, entryObj.id)
     if(insertInfo.found){throw new Error("item already exists at this second")}
     else{
+        let entryElm = entryObjToEntryElement(entryObj)   
         
-        
-        let entryElm = document.createElement("div")
-        entryElm.id = entryObj.id
-        let entryDate = new Date(entryObj.id * 1000)
-        entryElm.classList.add("entry")
-        entryElm.dataset.category = entryObj.data().category
-        
-        let year = `_${entryDate.getFullYear()}`
-        let monthYear = `${months[entryDate.getMonth()]}_${entryDate.getFullYear()}`
-    
-        if(document.querySelector(`#${year}`) === null){
-            let yearSidebarElm = document.createElement("div")
-            yearSidebarElm.dataset.selected = "false"
-    
-            yearSidebarElm.addEventListener("click", e => {
-                if(!e.target.classList.contains("sidebar-selected")){
-                    if(grab("sidebar-selected","class").length){
-                        grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
-                    }
-                    timeframe.use = true
-                    timeframe.start = Math.round(new Date(`1 January ${year.split("_")[1]} 00:00:00`).getTime() / 1000)
-                    timeframe.end = Math.round(new Date(`31 December ${year.split("_")[1]} 23:59:59`).getTime() / 1000)
-                    filterEntries(category)
-                    e.target.classList.add("sidebar-selected")    
-                }
-                else{
-                    timeframe.use = false
-                    filterEntries(category)
-                    e.target.classList.remove("sidebar-selected")   
-                }
-            })
-    
-            yearSidebarElm.id = `${year}`
-            yearSidebarElm.innerHTML = `${year}`
-            grab("sidebar").appendChild(yearSidebarElm)
-        }
-    
-        if(document.querySelector(`#${monthYear}`) === null){
-            let monthSidebarElm = document.createElement("div")
-    
-            monthSidebarElm.addEventListener("click", e => {
-                if(!e.target.classList.contains("sidebar-selected")){
-                    if(grab("sidebar-selected","class").length){
-                        grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
-                    }
-                    timeframe.use = true
-                    timeframe.start = Math.round(new Date(`1 ${monthYear.replace("_"," ")} 00:00:00`).getTime() / 1000)
-                    timeframe.end = Math.round(new Date(`${new Date(entryDate.getFullYear(), entryDate.getMonth() + 1, 0).getDate()} ${monthYear.replace("_"," ")} 23:59:59`).getTime() / 1000)
-                    filterEntries(category)
-                    e.target.classList.add("sidebar-selected")    
-                }
-                else{
-                    timeframe.use = false
-                    filterEntries(category)
-                    e.target.classList.remove("sidebar-selected")   
-                }
-            })
-                
-            monthSidebarElm.id = `${monthYear}`
-            monthSidebarElm.innerHTML = `${monthYear}`
-            grab("sidebar").appendChild(monthSidebarElm)
-        }
-    
-        entryElm.innerHTML = `
-            ${formatDateForEntry(entryDate)} ${entryObj.id}
-        `
-        
-    
         sortedListOfIds.splice(insertInfo.index, 0, entryObj.id)
         sortedListOfEntries.splice(insertInfo.index, 0, entryElm)
     
@@ -429,15 +314,19 @@ function insertEntryToList(entryObj){
     }
 }
 
-
 function filterEntries(categoryObj){
     let entries = grab("entries").children
+    grab("content-container").style.backgroundColor = categoryObj.current.bgColor
     if(entries.length){
         console.log("filter entries",categoryObj.current, timeframe)
         let entryVisible = false
         if(timeframe.use){
             for(let entry of entries){
-                if(entry.dataset.category !== categoryObj.current.name || timeframe.start > Number(entry.id) > timeframe.end){
+                if(entry.dataset.category !== categoryObj.current.name 
+                    || Number(entry.id) < timeframe.start
+                    || Number(entry.id) > timeframe.end
+                )
+                {
                     entry.style.display = "none"
                 }
                 else{
@@ -494,49 +383,6 @@ function unloadEntries(){
     //console.log("Unload data")
 }
 
-function addEventListenersToElements(){
-
-// ? Signin buttons
-    grab("signin-button").addEventListener("click", signInUser)
-    grab("signup-redirect-button").addEventListener("click", switchToSignup)
-
-// ? Signup buttons
-    grab("signup-button").addEventListener("click", createAndSignInUser)
-    grab("signin-redirect-button").addEventListener("click", switchToSignin)
-
-// ? Content buttons
-    grab("content-container").addEventListener("click", e =>{
-        if(
-            grab("sidebar-selected","class").length 
-            && !e.target.classList.contains("sidebar-selected")
-            && !e.target.classList.contains("category-selector-button")
-        )
-        {
-            grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
-            timeframe.use = false
-            filterEntries(category)
-        }
-    })
-
-    grab("dream-selector-button").addEventListener("click", () => category.current = categories.dream)
-    grab("diary-selector-button").addEventListener("click", () => category.current = categories.diary)
-    grab("thought-selector-button").addEventListener("click", () => category.current = categories.thought)
-
-    grab("sidebar-toggle-button").addEventListener("click", reverseChildren)
-    grab("add-entry-button").addEventListener("click", switchToAddEntry)
-
-    grab("logout-button").addEventListener("click", signOutUser)
-    
-
-// ? Add entry buttons
-    grab("cancel-entry-button").addEventListener("click", switchToShowEntries)
-
-    //TODO On add entry button, add a one time click event listener for loading drafts, so that theyre only read if theyre needed, and after that theyre saved in a variable
-
-}
-
-
-
 async function signInUser(){
     
     let emailInput      = grab("signin-email-input").value
@@ -565,7 +411,6 @@ async function signInUser(){
         errorsList.forEach((error) => { grab("signin-error").innerHTML += `# ${error} <br>` } ) 
     }  
 }
-
 async function createAndSignInUser(){
 
     //TODO Add email verification
@@ -598,7 +443,6 @@ async function createAndSignInUser(){
         errorsList.forEach((error) => { grab("signin-error").innerHTML += `# ${error} <br>` } ) 
     }
 }
-
 function signOutUser(){
     signOut(auth).then(() => {
         // ? Throws to observer
@@ -609,47 +453,30 @@ function signOutUser(){
     });
 }
 
-
-
 // * Page load!
 
-
-
+var userId = ""
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         console.log("show content and hide signin", user.uid)
-
-        // ? FOR NOW: 
-        // * A simple database snapshot is GET'd everytime a user logs on, 
-        // * New entries get POST'd to the databse then added to the local cache (not GET'd, to save read calls)
-        // * i.e: 
-        // * Reads per session: X amount of documents already in database
-        // * Writes per session: X amount of new documents created
-        // * No offline access except if the whole thing has already been loaded once and the variable is in cache
-
+        userId = user.uid
         // TODO PLAN
         // * Only get a certain amt of entries and udate as user scrolls (less reads)
         // * Do the whole local cache and offline persistence thing isjk 
-        // * Offline support
 
-        
-
-        resetAddEntryInputs()
         switchToShowEntries()
-
-        //await loadEntries(user.uid)
         var lastId = "0"
         onSnapshot(
-            query(collection(db, `users/${user.uid}/entries`)), { includeMetadataChanges: true }, (snapshot) => {
+            query(collection(db, `users/${userId}/entries`)), { includeMetadataChanges: true }, (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
                     const source = snapshot.metadata.fromCache ? "local cache" : "server";
                     if(change.type === "added"){
-                        if(change.doc.id > lastId){
-                            appendEntryToList(change.doc)      
-                            console.log("added:",change.doc.data(), "from", source)            
+                        if(change.doc.id > lastId){ //? If doc is newer
+                            prependEntryToList(change.doc)      
+                            console.log("added:",change.doc.id,change.doc.data(), "from", source)            
                         }
                         else{
-                            insertEntyToList(change.doc)
+                            insertEntryToList(change.doc)
                             console.log("inserted:",change.doc.data(), "from", source)
                         }
                     }
@@ -666,7 +493,7 @@ onAuthStateChanged(auth, async (user) => {
     }
     else {
         console.log("hide content and show signin")
-
+        userId = ""
         //TODO Remove data from session in observer
         unloadEntries()
         resetLoginInputs()
@@ -676,6 +503,48 @@ onAuthStateChanged(auth, async (user) => {
     }
 })
 
+function addEventListenersToElements(){
 
+    // ? Signin buttons
+        grab("signin-button").addEventListener("click", signInUser)
+        grab("signup-redirect-button").addEventListener("click", switchToSignup)
+    
+    // ? Signup buttons
+        grab("signup-button").addEventListener("click", createAndSignInUser)
+        grab("signin-redirect-button").addEventListener("click", switchToSignin)
+    
+    // ? Content buttons
+        grab("content-container").addEventListener("click", e =>{
+            if(
+                grab("sidebar-selected","class").length 
+                && !e.target.classList.contains("sidebar-selected")
+                && !e.target.classList.contains("category-selector-button")
+            )
+            {
+                grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
+                timeframe.use = false
+                filterEntries(category)
+            }
+        })
+    
+        grab("dream-selector-button").addEventListener("click", () => category.current = categories.dream)
+        grab("diary-selector-button").addEventListener("click", () => category.current = categories.diary)
+        grab("thought-selector-button").addEventListener("click", () => category.current = categories.thought)
+    
+        grab("sidebar-toggle-button").addEventListener("click", reverseChildren)
+        grab("add-entry-button").addEventListener("click", switchToAddEntry)
+    
+        grab("logout-button").addEventListener("click", signOutUser)
+        
+    
+    // ? Add entry buttons
+        grab("cancel-entry-button").addEventListener("click", switchToShowEntries)
+        grab("pick-draft-button").addEventListener("click", openDrafts)
+        grab("draft-entry-button").addEventListener("click", addNewDraft)
+        grab("submit-entry-button").addEventListener("click",addNewEntry)
+    
+        //TODO On add entry button, add a one time click event listener for loading drafts, so that theyre only read if theyre needed, and after that theyre saved in a variable
+    
+    }
 
 addEventListenersToElements()
