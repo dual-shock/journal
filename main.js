@@ -27,6 +27,9 @@ from "./js/firebaseUtils.js"
 
 //TODO add email verification, pagination, make it so action buttons go up when typing in new entry, drafts functionality, and fix sidebar and category buttons highlight styling when selected
 
+//TODO Add service worker to make downloadable
+//TODO Add delete button
+
 const firebaseConfig = {
     apiKey: "AIzaSyBXiMzyl3Q5IwCMFSoLYVQBdRiWTVq7ChI",
     authDomain: "diary-f575d.firebaseapp.com",
