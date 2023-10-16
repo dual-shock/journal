@@ -213,9 +213,11 @@ function addNewDraft(){
     console.log("drafts functionality not yet added")
 }
 
+
+
 function entryObjToEntryElement(entryObj){
     let entryElm = document.createElement("div")
-    entryElm.addEventListener("click",e => e.target.classList.toggle("selected-entry"))
+    entryElm.addEventListener("click",e => e.target.classList.toggle("selected-entry-content"))
     entryElm.id = entryObj.id
     let entryDate = new Date(entryObj.id * 1000)
     entryElm.classList.add("entry")
@@ -226,7 +228,7 @@ function entryObjToEntryElement(entryObj){
                 ${formatDateForEntry(entryDate)}
             </div>
             <div class="entry-wordcount">
-            ${entryObj.data().content.split(" ").length}
+            ${entryObj.data().content.split(" ").length} words
             </div>
         </div>
         <div class="entry-content">
@@ -242,9 +244,17 @@ function entryObjToEntryElement(entryObj){
 
     if(document.querySelector(`#${year}`) === null){
         let yearSidebarElm = document.createElement("div")
-        yearSidebarElm.dataset.selected = "false"
+        
 
-        yearSidebarElm.addEventListener("click", e => {
+
+
+        yearSidebarElm.id = `${year}`
+        yearSidebarElm.classList.add("year-container")
+        yearSidebarElm.innerHTML = `
+        <div class="year-title">${year.substring(1,5)}</div>
+        <div class="months"></div>
+        `
+        yearSidebarElm.children[0].addEventListener("click", e => {
             if(!e.target.classList.contains("sidebar-selected")){
                 if(grab("sidebar-selected","class").length){
                     grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
@@ -261,11 +271,8 @@ function entryObjToEntryElement(entryObj){
                 e.target.classList.remove("sidebar-selected")   
             }
         })
-
-        yearSidebarElm.id = `${year}`
-        yearSidebarElm.innerHTML = `${year}`.substring(1,5)
-        grab("sidebar").prepend(yearSidebarElm)
         
+        grab("sidebar").prepend(yearSidebarElm)
     }
 
     if(document.querySelector(`#${monthYear}`) === null){
@@ -292,15 +299,8 @@ function entryObjToEntryElement(entryObj){
         monthSidebarElm.id = `${monthYear}`
         monthSidebarElm.dataset.year = `${year}`
         monthSidebarElm.innerHTML = `${monthYear}`.substring(0,3)
-        //grab("sidebar").prepend(monthSidebarElm)
-        if(lastSidebarMonthElm !== undefined){
-            grab("sidebar").insertBefore(monthSidebarElm, lastSidebarMonthElm);
-        }
-        else{
-            grab("sidebar").append(monthSidebarElm)
-        }
-        
-        lastSidebarMonthElm = grab(`${monthYear}`)
+        grab(`${year}`).children[1].prepend(monthSidebarElm)
+
     }
 
     return entryElm
@@ -326,7 +326,7 @@ function insertEntryToList(entryObj){
     
         grab("entries").innerHTML = "";
         for(let entry of sortedListOfEntries){
-            grab("entries").append(entry)
+            grab("entries").prepend(entry)
         }
     }
 }
@@ -375,6 +375,9 @@ function reverseChildren(){
     if(entriesElm.dataset.flipped == "false"){
         entriesElm.style.flexDirection = "column-reverse";
         sidebarElm.style.flexDirection = "column-reverse";
+        for(let monthsElm of grab(".months","all")){
+            monthsElm.style.flexDirection = "column-reverse"
+        }
 
         entriesElm.scrollTop = 0 - entriesElm.scrollHeight
         sidebarElm.scrollTop = 0 - sidebarElm.scrollHeight
@@ -386,6 +389,9 @@ function reverseChildren(){
     if(entriesElm.dataset.flipped == "true"){
         entriesElm.style.flexDirection = "column"
         sidebarElm.style.flexDirection = "column";
+        for(let monthsElm of grab(".months","all")){
+            monthsElm.style.flexDirection = "column"
+        }
 
         entriesElm.scrollTop = 0
         sidebarElm.scrollTop = 0    
@@ -538,10 +544,25 @@ function addEventListenersToElements(){
                 filterEntries(category)
             }
         })
-    
-        grab("dream-selector-button").addEventListener("click", () => category.current = categories.dream)
-        grab("diary-selector-button").addEventListener("click", () => category.current = categories.diary)
-        grab("thought-selector-button").addEventListener("click", () => category.current = categories.thought)
+        
+        grab("dream-selector-button").addEventListener("click", e => {
+            category.current = categories.dream;
+            e.target.style.fontSize ="1.6rem"
+            grab("diary-selector-button").style.fontSize ="1.4rem"
+            grab("thought-selector-button").style.fontSize ="1.4rem"
+        })
+        grab("diary-selector-button").addEventListener("click", e => {
+            category.current = categories.diary;
+            e.target.style.fontSize ="1.6rem"
+            grab("dream-selector-button").style.fontSize ="1.4rem"
+            grab("thought-selector-button").style.fontSize ="1.4rem"
+        })
+        grab("thought-selector-button").addEventListener("click", e => {
+            category.current = categories.thought;
+            e.target.style.fontSize ="1.6rem"
+            grab("diary-selector-button").style.fontSize ="1.4rem"
+            grab("dream-selector-button").style.fontSize ="1.4rem"
+        })
     
         grab("sidebar-toggle-button").addEventListener("click", reverseChildren)
         grab("add-entry-button").addEventListener("click", switchToAddEntry)
