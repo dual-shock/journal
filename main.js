@@ -25,7 +25,7 @@ from "./js/firebaseUtils.js"
 // * hide(), showFlex(), showBlock(), binaryFind()
 // * Added to namespace from js/utils.js in index.html
 
-//TODO add email verification, pagination, make it so action buttons go up when typing in new entry, drafts functionality 
+//TODO add email verification, pagination, make it so action buttons go up when typing in new entry, drafts functionality, and fix sidebar and category buttons highlight styling when selected
 
 const firebaseConfig = {
     apiKey: "AIzaSyBXiMzyl3Q5IwCMFSoLYVQBdRiWTVq7ChI",
