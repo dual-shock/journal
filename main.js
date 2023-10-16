@@ -94,6 +94,7 @@ const sidebarElm = grab("sidebar")
 
 var sortedListOfIds = []
 var sortedListOfEntries = []
+var lastSidebarMonthElm
 
 function switchToSignup(){
 
@@ -174,7 +175,7 @@ function resetLoginInputs(){
     })    
 }
 function resetAddEntryInputs(){
-    grab("time-input").value = `${new Date().getFullYear()}-${addZero(new Date().getMonth()+1)}-${addZero(new Date().getDate())}T${addZero(new Date().getHours())}:${addZero(new Date().getMinutes())}:${new Date().getSeconds()}`
+    grab("time-input").value = `${new Date().getFullYear()}-${addZero(new Date().getMonth()+1)}-${addZero(new Date().getDate())}T${addZero(new Date().getHours())}:${addZero(new Date().getMinutes())}:${addZero(new Date().getSeconds())}`
     grab("text-input").value = ""
     grab("text-input").placeholder = "type here..."
 }   
@@ -214,15 +215,23 @@ function addNewDraft(){
 
 function entryObjToEntryElement(entryObj){
     let entryElm = document.createElement("div")
+    entryElm.addEventListener("click",e => e.target.classList.toggle("selected-entry"))
     entryElm.id = entryObj.id
     let entryDate = new Date(entryObj.id * 1000)
     entryElm.classList.add("entry")
     entryElm.dataset.category = entryObj.data().category
     entryElm.innerHTML = `
-        ${formatDateForEntry(entryDate)} <br>
-        ${entryObj.id} <br>
-        ${entryObj.data().category} <br>
-        ${entryObj.data().content} <br>
+        <div class="entry-info">
+            <div class="entry-date">
+                ${formatDateForEntry(entryDate)}
+            </div>
+            <div class="entry-wordcount">
+            ${entryObj.data().content.split(" ").length}
+            </div>
+        </div>
+        <div class="entry-content">
+        ${entryObj.data().content}
+        </div>
     ` 
     if(entryObj.data().category != category.current.name){
         entryElm.style.display = "none"
@@ -254,12 +263,11 @@ function entryObjToEntryElement(entryObj){
         })
 
         yearSidebarElm.id = `${year}`
-        yearSidebarElm.innerHTML = `${year}`
+        yearSidebarElm.innerHTML = `${year}`.substring(1,5)
         grab("sidebar").prepend(yearSidebarElm)
+        
     }
-    //TODO The sidebar moves back in time downwards, so the year item is naturally at the bottom of all the months
-    //TODO Of said year, find solution that puts year ABOVE all those months instead (and perhaps inverts that)
-    //TODO When reverting the list (this might happen naturally if added in right order)
+
     if(document.querySelector(`#${monthYear}`) === null){
         let monthSidebarElm = document.createElement("div")
 
@@ -282,8 +290,17 @@ function entryObjToEntryElement(entryObj){
         })
         
         monthSidebarElm.id = `${monthYear}`
-        monthSidebarElm.innerHTML = `${monthYear}`
-        grab("sidebar").prepend(monthSidebarElm)
+        monthSidebarElm.dataset.year = `${year}`
+        monthSidebarElm.innerHTML = `${monthYear}`.substring(0,3)
+        //grab("sidebar").prepend(monthSidebarElm)
+        if(lastSidebarMonthElm !== undefined){
+            grab("sidebar").insertBefore(monthSidebarElm, lastSidebarMonthElm);
+        }
+        else{
+            grab("sidebar").append(monthSidebarElm)
+        }
+        
+        lastSidebarMonthElm = grab(`${monthYear}`)
     }
 
     return entryElm
@@ -379,9 +396,6 @@ function reverseChildren(){
     }
     
 }
-function unloadEntries(){
-    //console.log("Unload data")
-}
 
 async function signInUser(){
     
@@ -412,8 +426,6 @@ async function signInUser(){
     }  
 }
 async function createAndSignInUser(){
-
-    //TODO Add email verification
 
     let emailInput              = grab("signup-email-input").value
     let passwordInput           = grab("signup-password-input").value
@@ -456,6 +468,7 @@ function signOutUser(){
 // * Page load!
 
 var userId = ""
+
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         console.log("show content and hide signin", user.uid)
@@ -471,7 +484,7 @@ onAuthStateChanged(auth, async (user) => {
                 snapshot.docChanges().forEach((change) => {
                     const source = snapshot.metadata.fromCache ? "local cache" : "server";
                     if(change.type === "added"){
-                        if(change.doc.id > lastId){ //? If doc is newer
+                        if(Number(change.doc.id) > Number(lastId)){ //? If doc is newer
                             prependEntryToList(change.doc)      
                             console.log("added:",change.doc.id,change.doc.data(), "from", source)            
                         }
@@ -494,8 +507,7 @@ onAuthStateChanged(auth, async (user) => {
     else {
         console.log("hide content and show signin")
         userId = ""
-        //TODO Remove data from session in observer
-        unloadEntries()
+
         resetLoginInputs()
         switchToSignin()
 
