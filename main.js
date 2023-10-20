@@ -28,7 +28,8 @@ from "./js/firebaseUtils.js"
 //TODO add email verification, pagination, make it so action buttons go up when typing in new entry, drafts functionality, and fix sidebar and category buttons highlight styling when selected
 
 //TODO Add service worker to make downloadable
-//TODO Add delete button
+//TODO Add delete button (or mby just COMMAND, yk)
+//TODO Make it so u can't add future entries, or edit entry date or entry content
 
 const firebaseConfig = {
     apiKey: "AIzaSyBXiMzyl3Q5IwCMFSoLYVQBdRiWTVq7ChI",
