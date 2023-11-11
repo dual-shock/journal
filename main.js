@@ -29,7 +29,8 @@ from "./js/firebaseUtils.js"
 //TODO make entries go thru data sanitation SERVER SIDE
 //TODO ? E2E encryption?
 //TODO Add service worker to make downloadable
-//TODO Add delete button
+//TODO Add delete button (or mby just COMMAND, yk)
+//TODO Make it so u can't add future entries, or edit entry date or entry content
 
 const firebaseConfig = {
     apiKey: "AIzaSyBXiMzyl3Q5IwCMFSoLYVQBdRiWTVq7ChI",
