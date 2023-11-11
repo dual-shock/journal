@@ -26,7 +26,8 @@ from "./js/firebaseUtils.js"
 // * Added to namespace from js/utils.js in index.html
 
 //TODO add email verification, pagination, make it so action buttons go up when typing in new entry, drafts functionality, and fix sidebar and category buttons highlight styling when selected
-
+//TODO make entries go thru data sanitation SERVER SIDE
+//TODO ? E2E encryption?
 //TODO Add service worker to make downloadable
 //TODO Add delete button
 
@@ -239,6 +240,9 @@ function entryObjToEntryElement(entryObj){
         <div class="entry-content">
         ${entryObj.data().content}
         </div>
+        <div class="entry-action-buttons">
+            
+        </div>
     ` 
     if(entryObj.data().category != category.current.name){
         entryElm.style.display = "none"
@@ -250,9 +254,6 @@ function entryObjToEntryElement(entryObj){
     if(document.querySelector(`#${year}`) === null){
         let yearSidebarElm = document.createElement("div")
         
-
-
-
         yearSidebarElm.id = `${year}`
         yearSidebarElm.classList.add("year-container")
         yearSidebarElm.innerHTML = `
