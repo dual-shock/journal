@@ -33,12 +33,23 @@
       box-sizing: border-box;}
 
 
-
 /* ? Signin styling */  
     #login-container{
         width: 100%;
         height: 100%;
     }
+        #login-back-button{
+            position: fixed;
+            width: fit-content;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            padding:2%;
+        }
+        #login-back-button>a{
+            color:#3D3B30;
+        }
     .login-element-container{
         width: 100%;
         height: 100%;
@@ -264,9 +275,23 @@
                         -webkit-line-clamp: none;
                         -webkit-box-orient: none; 
                     }
-        #logout-button{
+        #logout-buttons{
             flex:1;
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: center;
+            column-gap: 10px;
         }
+            #back-button{
+                flex:1;
+            }
+                #back-button > a {
+                    color: #3D3B30;
+                }
+            #logout-button{
+                flex:1;
+            }
 
 /* * Entries adding container */
     #new-entry-container{
