@@ -2,6 +2,9 @@
     button, input, textarea{all:unset; box-sizing: border-box;}
     ::placeholder{color:rgba(0, 0, 0, 0.6);}
 
+/* ? Fonts */
+    @font-face{font-family:"pixelfont";src: url("../resources/fonts/VT323-Regular.ttf") format("truetype")}
+
 
 /* ? Boring stuff for mobile */
     html {
@@ -21,7 +24,8 @@
     body{
         background-color: #CDC392;
         height:100%;
-        width:100%;}
+        width:100%;
+        font-family: pixelfont;}
     *{
         box-sizing: border-box;
         margin:0;
@@ -103,6 +107,26 @@
         padding:10px;
 
         color: #3D3B30;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+
+    }
+    #content-container.diary{
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("./imgs/diary/bg.gif");
+        background-position: center top;
+        background-size: cover;
+    }
+    #content-container.dream{
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("./imgs/dream/bg.gif");
+        background-position: center top;
+        background-size: cover;
+    }
+    #content-container.thought{
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("./imgs/thought/bg.gif");
+        background-position: center top;
+        background-size: cover;
     }
 
 /* * Category selector */
@@ -126,7 +150,7 @@
             font-size: 1.4rem;
             font-weight: bold;
             background-color:rgba(0, 0, 0, 0.155);
-            
+            font-family: pixelfont;
         }
         
 
@@ -160,7 +184,11 @@
             #sidebar-toggle-button{
                 flex:1;
                 font-size: 2rem;
+                
             }
+                #sidebar-toggle-button-text{
+                    transform: rotate(90deg);
+                }
             #add-entry-button{
                 flex:6;
                 

@@ -54,16 +54,13 @@ const months = [
 ]
 const categories = {
     dream : {
-        name : "dream",
-        bgColor: "#c692cd"
+        name : "dream"
     },
     diary : {
-        name : "diary",
-        bgColor: "#CDC392"
+        name : "diary"
     },
     thought : {
-        name : "thought",
-        bgColor: "#bbcd92"
+        name : "thought"
     },
 }
 const timeframe = {
@@ -340,7 +337,7 @@ function insertEntryToList(entryObj){
 
 function filterEntries(categoryObj){
     let entries = grab("entries").children
-    grab("content-container").style.backgroundColor = categoryObj.current.bgColor
+    grab("content-container").className = categoryObj.current.name    
     if(entries.length){
         console.log("filter entries",categoryObj.current, timeframe)
         let entryVisible = false
@@ -390,7 +387,7 @@ function reverseChildren(){
         sidebarElm.scrollTop = 0 - sidebarElm.scrollHeight
 
         entriesElm.dataset.flipped = "true"
-        grab("sidebar-toggle-button").innerHTML = "&#8593;"
+        grab("sidebar-toggle-button-text").style.transform ="rotate(-90deg)"
         return
     }
     if(entriesElm.dataset.flipped == "true"){
@@ -404,7 +401,7 @@ function reverseChildren(){
         sidebarElm.scrollTop = 0    
     
         entriesElm.dataset.flipped = "false"
-        grab("sidebar-toggle-button").innerHTML = "&#8595;"
+        grab("sidebar-toggle-button-text").style.transform ="rotate(90deg)"
         return
     }
     
