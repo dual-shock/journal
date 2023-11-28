@@ -1,6 +1,5 @@
 /* ? Universal input stylization */
     button, input, textarea{all:unset; box-sizing: border-box;}
-    ::placeholder{color:rgba(0, 0, 0, 0.6);}
 
 /* ? Fonts */
     @font-face{font-family:"pixelfont";src: url("../resources/fonts/VT323-Regular.ttf") format("truetype")}
@@ -105,17 +104,19 @@
         flex-direction: column;
         align-items: center;
         padding:10px;
-        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+        transition: background-position 400ms ease-in-out;
     }
 
 /* ? Category specific styling */
     /* * Diary */
         #content-container.diary{
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4)),
             url("./imgs/diary/bg.gif");
             background-position: center top;
             background-size: cover;
             color: rgba(226, 223, 19, 0.75);
+            transition: background-position 500ms ease-in-out;
         }
         .diary #back-button > a {
             color: rgba(226, 223, 19, 0.75);
@@ -146,12 +147,13 @@
         .diary .entry-content {
             color: rgba(226, 223, 19, 0.65);
         }
+        .diary ::placeholder{color:rgba(226, 223, 19, 0.6);}
 
     /* * Dream */
         #content-container.dream{
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4)),
             url("./imgs/dream/bg.gif");
-            background-position: center top;
+            background-position: left top;
             background-size: cover;
             color: rgba(224, 91, 218, 0.75);
         }
@@ -186,12 +188,13 @@
         .dream .entry-content {
             color: rgba(224, 91, 218, 0.65);
         }
+        .dream ::placeholder{color:rgba(224, 91, 218, 0.6);}
         
     /* * Thought */
         #content-container.thought{
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4)),
             url("./imgs/thought/bg.gif");
-            background-position: center top;
+            background-position: right top;
             background-size: cover;
             color:rgba(127, 255, 212, 0.75);
         }
@@ -226,6 +229,7 @@
         .thought .entry-content {
             color:rgba(127, 255, 212, 0.65);
         }
+        .thought ::placeholder{color:rgba(127, 255, 212, 0.6);}
 
 /* * Category selector */
     #category-selector{
