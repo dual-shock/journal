@@ -105,29 +105,127 @@
         flex-direction: column;
         align-items: center;
         padding:10px;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    }
 
-        color: #3D3B30;
-        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+/* ? Category specific styling */
+    /* * Diary */
+        #content-container.diary{
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            url("./imgs/diary/bg.gif");
+            background-position: center top;
+            background-size: cover;
+            color: rgba(226, 223, 19, 0.75);
+        }
+        .diary #back-button > a {
+            color: rgba(226, 223, 19, 0.75);
+        }
+        .diary #logout-button {
+            color: rgba(226, 223, 19, 0.5);
+        }
+        .diary .category-selector-button {
+            color: rgba(226, 223, 19, 0.75);
+        }    
+        .diary .category-selector-selected {
+            color: rgba(226, 223, 19, 0.85);
+            text-shadow:
+            0 0 7px rgba(226, 223, 19, 0.5),
+            0 0 10px rgba(226, 223, 19, 0.5),
+            0 0 21px rgba(226, 223, 19, 0.5);
+        }
+        .diary .sidebar-selected {
+            color: rgba(226, 223, 19, 0.85);
+            text-shadow:
+            0 0 7px rgba(226, 223, 19, 0.5),
+            0 0 10px rgba(226, 223, 19, 0.5),
+            0 0 21px rgba(226, 223, 19, 0.5);
+        }
+        .diary .entry-info {
+            color: rgba(226, 223, 19, 0.75);
+        }
+        .diary .entry-content {
+            color: rgba(226, 223, 19, 0.65);
+        }
 
-    }
-    #content-container.diary{
-        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url("./imgs/diary/bg.gif");
-        background-position: center top;
-        background-size: cover;
-    }
-    #content-container.dream{
-        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url("./imgs/dream/bg.gif");
-        background-position: center top;
-        background-size: cover;
-    }
-    #content-container.thought{
-        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url("./imgs/thought/bg.gif");
-        background-position: center top;
-        background-size: cover;
-    }
+    /* * Dream */
+        #content-container.dream{
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            url("./imgs/dream/bg.gif");
+            background-position: center top;
+            background-size: cover;
+            color: rgba(224, 91, 218, 0.75);
+        }
+        .dream #back-button > a {
+            color: rgba(224, 91, 218, 0.75);
+        }
+        .dream #logout-button {
+            color:rgba(224, 91, 218, 0.5);
+        }
+        .dream .category-selector-button {
+            color: rgba(224, 91, 218, 0.75);
+        }
+        .dream .category-selector-selected {
+            color: rgba(224, 91, 218, 0.85);
+            text-shadow:
+            0 0 7px rgba(224, 91, 218, 0.5),
+            0 0 10px rgba(224, 91, 218, 0.5),
+            0 0 21px rgba(224, 91, 218, 0.5),
+            0 0 42px rgba(224, 91, 218, 0.5);
+        }
+        .dream .sidebar-selected {
+            color: rgba(224, 91, 218, 0.85);
+            text-shadow:
+            0 0 7px rgba(224, 91, 218, 0.5),
+            0 0 10px rgba(224, 91, 218, 0.5),
+            0 0 21px rgba(224, 91, 218, 0.5),
+            0 0 42px rgba(224, 91, 218, 0.5);
+        }
+        .dream .entry-info {
+            color: rgba(224, 91, 218, 0.75);
+        }
+        .dream .entry-content {
+            color: rgba(224, 91, 218, 0.65);
+        }
+        
+    /* * Thought */
+        #content-container.thought{
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            url("./imgs/thought/bg.gif");
+            background-position: center top;
+            background-size: cover;
+            color:rgba(127, 255, 212, 0.75);
+        }
+        .thought #back-button > a {
+            color:rgba(127, 255, 212, 0.75);
+        }
+        .thought #logout-button {
+            color:rgba(127, 255, 212, 0.5);
+        }
+        .thought .category-selector-button {
+            color:rgba(127, 255, 212, 0.75);
+        }
+        .thought .category-selector-selected {
+            color:rgba(127, 255, 212, 0.85);
+            text-shadow:
+            0 0 7px rgba(127, 255, 212, 0.5),
+            0 0 10px rgba(127, 255, 212, 0.5),
+            0 0 21px rgba(127, 255, 212, 0.5),
+            0 0 42px rgba(127, 255, 212, 0.5);
+        }
+        .thought .sidebar-selected {
+            color:rgba(127, 255, 212, 0.85);
+            text-shadow:
+            0 0 7px rgba(127, 255, 212, 0.5),
+            0 0 10px rgba(127, 255, 212, 0.5),
+            0 0 21px rgba(127, 255, 212, 0.5),
+            0 0 42px rgba(127, 255, 212, 0.5);
+        }
+        .thought .entry-info {
+            color:rgba(127, 255, 212, 0.75);
+        }
+        .thought .entry-content {
+            color:rgba(127, 255, 212, 0.65);
+        }
 
 /* * Category selector */
     #category-selector{
@@ -241,7 +339,7 @@
                     }
                     
                     .sidebar-selected{
-                        color:red;
+                        
                     }
             #entries-container{
                 display:flex;
@@ -271,7 +369,6 @@
                         display:flex;
                         flex-direction: row;
                         font-weight: bold;
-
                     }
                         .entry-date{
                             flex:4;
@@ -314,9 +411,7 @@
             #back-button{
                 flex:1;
             }
-                #back-button > a {
-                    color: #3D3B30;
-                }
+
             #logout-button{
                 flex:1;
             }

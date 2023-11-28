@@ -541,6 +541,7 @@ function addEventListenersToElements(){
                 grab("sidebar-selected","class").length 
                 && !e.target.classList.contains("sidebar-selected")
                 && !e.target.classList.contains("category-selector-button")
+                && !e.target.classList.contains("entry-content")
             )
             {
                 grab("sidebar-selected","class")[0].classList.remove("sidebar-selected")
@@ -551,21 +552,21 @@ function addEventListenersToElements(){
         
         grab("dream-selector-button").addEventListener("click", e => {
             category.current = categories.dream;
-            e.target.style.fontSize ="1.6rem"
-            grab("diary-selector-button").style.fontSize ="1.4rem"
-            grab("thought-selector-button").style.fontSize ="1.4rem"
+            e.target.className = "category-selector-button category-selector-selected"
+            grab("diary-selector-button").className ="category-selector-button"
+            grab("thought-selector-button").className ="category-selector-button"
         })
         grab("diary-selector-button").addEventListener("click", e => {
             category.current = categories.diary;
-            e.target.style.fontSize ="1.6rem"
-            grab("dream-selector-button").style.fontSize ="1.4rem"
-            grab("thought-selector-button").style.fontSize ="1.4rem"
+            e.target.className = "category-selector-button category-selector-selected"
+            grab("dream-selector-button").className ="category-selector-button"
+            grab("thought-selector-button").className ="category-selector-button"
         })
         grab("thought-selector-button").addEventListener("click", e => {
             category.current = categories.thought;
-            e.target.style.fontSize ="1.6rem"
-            grab("diary-selector-button").style.fontSize ="1.4rem"
-            grab("dream-selector-button").style.fontSize ="1.4rem"
+            e.target.className = "category-selector-button category-selector-selected"
+            grab("diary-selector-button").className ="category-selector-button"
+            grab("dream-selector-button").className ="category-selector-button"
         })
     
         grab("sidebar-toggle-button").addEventListener("click", reverseChildren)
