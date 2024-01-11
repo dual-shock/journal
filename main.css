@@ -2,7 +2,7 @@
     button, input, textarea{all:unset; box-sizing: border-box;}
 
 /* ? Fonts */
-    @font-face{font-family:"pixelfont";src: url("../resources/fonts/VT323-Regular.ttf") format("truetype")}
+    @font-face{font-family:"pixelfont";src: url("https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isfFJU.woff2") format("woff2")}
 
 
 /* ? Boring stuff for mobile */
@@ -24,7 +24,8 @@
         background-color: #CDC392;
         height:100%;
         width:100%;
-        font-family: pixelfont;}
+        font-family: pixelfont;
+        font-display: block;}
     *{
         box-sizing: border-box;
         margin:0;
@@ -34,6 +35,14 @@
     *::before,
     *::after {
       box-sizing: border-box;}
+    #loading{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        font-family: pixelfont;
+        justify-content: center;
+        align-items: center;
+    }
 
 
 /* ? Signin styling */  

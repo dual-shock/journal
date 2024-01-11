@@ -2,16 +2,13 @@ import {
     // * App
     initializeApp,
 
-    // * Firestore
-    getFirestore, collection, 
+    collection, 
     initializeFirestore,
     persistentLocalCache,
-    enableIndexedDbPersistence,
     CACHE_SIZE_UNLIMITED,
-    getDocsFromCache,
     onSnapshot,
-    getDocs, setDoc, doc,
-    orderBy, query, 
+    setDoc, doc,
+    query, 
 
     // * Auth
     getAuth, onAuthStateChanged, 
@@ -32,6 +29,8 @@ from "./js/firebaseUtils.js"
 //TODO Add delete button (or mby just COMMAND, yk)
 //TODO Make it so u can't add future entries, or edit entry date or entry content
 
+
+
 const firebaseConfig = {
     apiKey: "AIzaSyBXiMzyl3Q5IwCMFSoLYVQBdRiWTVq7ChI",
     authDomain: "diary-f575d.firebaseapp.com",
@@ -40,13 +39,9 @@ const firebaseConfig = {
     messagingSenderId: "22289005998",
     appId: "1:22289005998:web:4a539cd0d2b8c0c92b5c3f"
 }
-const app = initializeApp(firebaseConfig);
-const db = initializeFirestore(app, {
-    localCache: persistentLocalCache({
-        cacheSizeBytes:CACHE_SIZE_UNLIMITED
-    })
-})
-const auth = getAuth();
+//const app = initializeApp(firebaseConfig);
+
+
 
 const months = [ 
     "January", "February", "March", "April", "May", "June",
@@ -98,7 +93,6 @@ const sidebarElm = grab("sidebar")
 
 var sortedListOfIds = []
 var sortedListOfEntries = []
-var lastSidebarMonthElm
 
 function switchToSignup(){
 
@@ -475,10 +469,11 @@ function signOutUser(){
     });
 }
 
-// * Page load!
+// * Page load
 
 var userId = ""
-
+const auth = getAuth();
+grab("loading").style.display = "none"
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         console.log("show content and hide signin", user.uid)
@@ -489,6 +484,11 @@ onAuthStateChanged(auth, async (user) => {
 
         switchToShowEntries()
         var lastId = "0"
+        const db = initializeFirestore(app, {
+            localCache: persistentLocalCache({
+                cacheSizeBytes:CACHE_SIZE_UNLIMITED
+            })
+        })
         onSnapshot(
             query(collection(db, `users/${userId}/entries`)), { includeMetadataChanges: true }, (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
