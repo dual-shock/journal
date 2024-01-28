@@ -40,7 +40,7 @@ const firebaseConfig = {
     appId: "1:22289005998:web:4a539cd0d2b8c0c92b5c3f"
 }
 const app = initializeApp(firebaseConfig);
-
+let db 
 
 
 const months = [ 
@@ -484,7 +484,7 @@ onAuthStateChanged(auth, async (user) => {
 
         switchToShowEntries()
         var lastId = "0"
-        const db = initializeFirestore(app, {
+        db = initializeFirestore(app, {
             localCache: persistentLocalCache({
                 cacheSizeBytes:CACHE_SIZE_UNLIMITED
             })
@@ -517,6 +517,7 @@ onAuthStateChanged(auth, async (user) => {
     else {
         console.log("hide content and show signin")
         userId = ""
+        db = ""
 
         resetLoginInputs()
         switchToSignin()
