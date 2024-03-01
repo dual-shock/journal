@@ -1,4 +1,4 @@
 # journal
 beautiful princess disorder journal
 
-https://nøkken.online/journal
+https://nixie.digital/journal
