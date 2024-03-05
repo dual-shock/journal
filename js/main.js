@@ -16,7 +16,7 @@ import {
     signInWithEmailAndPassword, 
     signOut
 }
-from "./js/firebaseUtils.js"
+from "./firebaseUtils.js"
 
 // * formatDateForEntry(), addZero(), emailValid()
 // * hide(), showFlex(), showBlock(), binaryFind()
